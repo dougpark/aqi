@@ -2,10 +2,9 @@
 <html>
 
 <body>
-    <form id="name_form">
-        <label>First Name:</label><input type="text" name="first_name" />
-        <br />
-        <label>Last Name:</label><input type="text" name="last_name" />
+    <form id="sensor_form">
+        <label>Sensor id:</label>
+        <input type="text" id="sensor_id" name="sensor_id" />
         <br />
         <input type="submit" value="submit" />
     </form>
@@ -14,7 +13,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <script type="text/javascript">
-        $('#name_form').submit(function (e) {
+        $('#sensor_form').submit(function (e) {
             e.preventDefault();
 
             var data = {};
@@ -33,18 +32,20 @@
             // data.first_name = element.val()
 
             // vanilla javascript method to get value by name
-            data.first_name = document.getElementsByName('first_name')[0].value
+            data.sensor_id = document.getElementsByName('sensor_id')[0].value
+
+            // jquery way to access form data by id
+            // console.log('sensor_id: ', $("#sensor_id").val())
 
             // jquery method to get value by name
             // data.first_name = $('[name=first_name]').val()
-            data.last_name = $('[name=last_name]').val()
+            // data.last_name = $('[name=last_name]').val()
             data.day_week = "Friday"
-
             console.log(data)
 
             $.ajax({
                 type: 'POST',
-                url: '/api/say_name',
+                url: '/api/sensor_post',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
@@ -52,10 +53,15 @@
                 success: function (callback) {
                     console.log(callback)
                     console.log(callback.result);
-                    console.log(callback.result.first_name)
+                    console.log(callback.result.sensor_id)
                     result = callback.result
+                    error = result.error
                     // Watch out for Cross Site Scripting security issues when setting dynamic content!
-                    $(this).text('Hello ' + result.first_name + ' ' + result.last_name + '!');
+                    if (!error) {
+                        $(this).text('Sensor id set to: ' + result.sensor_id);
+                    } else {
+                        $(this).text('Error: ' + error);
+                    }
                 },
                 error: function () {
                     $(this).html("error!");
