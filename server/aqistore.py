@@ -3,6 +3,7 @@
 import json
 import logging
 import datastore
+from dotmap import DotMap
 
 # Import Requests Library
 import requests
@@ -24,6 +25,7 @@ def calcAQ(Cp, Ih, Il, BPh, BPl):
 def purpleAir():
     aqiColor = "#00FF00"
     api_data = ""
+    error = None
 
     # concat base_url with selected sensor_id
     sensor_id = datastore.get_sensor_id()
@@ -39,9 +41,9 @@ def purpleAir():
         results = data['results'][0]
         sensor_label = results['Label']
         PM25 = results['PM2_5Value']
-        humidity = "Humidity: " + results['humidity']
+        humidity = results['humidity']
         temp = results['temp_f']
-        pressure = "Pressure: " + results['pressure']
+        pressure = results['pressure']
 
         # http://tech.thejoestory.com/2020/09/air-quality-calculation-purple-air-api.html
         pm2 = 0.0
@@ -74,7 +76,19 @@ def purpleAir():
             aqiColor = "#00FF00"
         aqi = str(round(aq))
     except Exception as e:
-        logging.warning('aqistore - Error getting data from PurpleAir api.', e)
+        error = 'aqistore - Error getting data from PurpleAir api.'
+        logging.warning(error, e)
         return
 
-    return aqi, aqiColor
+    data = DotMap()
+    data.aqi = aqi
+    data.label = sensor_label
+    data.aqiColor = aqiColor
+    data.temp = temp
+    data.humidity = humidity
+    data.pressure = pressure
+    data.api_error = error
+    logging.info('Processed data from PurpleAir api: ')
+    logging.info(data.toDict())
+
+    return data

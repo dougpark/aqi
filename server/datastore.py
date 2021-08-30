@@ -48,6 +48,7 @@ def delete_sensor_id():
 
 def set_sensor_id(sensor_id):
 
+    # can only handle 1 sensor_id at a time!
     delete_sensor_id()
 
     db = get_db()

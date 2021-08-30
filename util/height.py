@@ -1,5 +1,6 @@
 
-import sys, platform
+import sys
+import platform
 import os
 
 print(os.uname().machine)
@@ -7,10 +8,10 @@ print(os.uname().machine)
 print(platform.python_version())
 
 height = {
-    'OLO':120,
-    'Daniil':185,
-    'Thay':180
-    }
+    'OLO': 120,
+    'Daniil': 185,
+    'Thay': 180
+}
 
 for key, length in height.items():
     meters = length / 100

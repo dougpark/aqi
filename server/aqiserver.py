@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 import os
 import logging
 import datastore
@@ -11,7 +11,7 @@ from dotmap import DotMap
 
 # logging configuration
 # debug, info, warning, error, critical
-logging.basicConfig(filename='./instance/aqi.log', filemode='w',
+logging.basicConfig(filename='./instance/aqi.log',
                     level=logging.DEBUG, format='%(asctime)s %(message)s')
 logging.info('Started')
 logging.info('running server.py')
@@ -54,11 +54,15 @@ def sensor_index():
 
 @app.route('/aqi')
 def aqi_index():
-    return render_template('aqi.html')
+    resp = make_response(render_template('aqi.html'))
+    resp.set_cookie('aqi', 'aqi')
+    return resp
 
 
-@app.route('/api/aqi', methods=['POST'])
+@app.route('/api/aqi', methods=['GET', 'POST'])
 def aqi_post():
+    logging.info('**************** starting aqi ')
+    # logging.info('request user_agent: ', request.)
     out = aqi_proc()
     r = out.toDict()
     return jsonify(result=r, status=200)
@@ -69,16 +73,13 @@ def aqi_proc():
     aqi = 0
     aqiColor = 0
     try:
-        aqi, aqiColor = aqistore.purpleAir()
+        out = aqistore.purpleAir()
     except Exception as e:
         error = e
         logging.warning(e)
-    out = DotMap()
-    out.aqi = aqi
-    out.aqiColor = aqiColor
     out.error = error
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
     logging.info('aqi_proc - data from purpleAir.', out.toDict())
-    logging.info(out)
     return out
 
 
@@ -147,5 +148,4 @@ def print_name(name):
 
 
 if __name__ == '__main__':
-
     app.run(debug=True, host='0.0.0.0', port=5000)
