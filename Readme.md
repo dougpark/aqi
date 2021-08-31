@@ -20,11 +20,14 @@ Join in on the Raspberry Pi Zero fun while exploring a whole host of cool tech! 
 - [Jquery](https://www.w3schools.com/jquery/default.asp)
 - [Html](https://www.w3schools.com/html/default.asp)
 - [CSS](https://www.w3schools.com/css/default.asp)
-- [w3.css library](https://www.w3schools.com/w3css/)
-- [Json](https://www.w3schools.com/js/js_json_intro.asp)
+- [W3.CSS framework](https://www.w3schools.com/w3css/)
+- [JSON](https://www.w3schools.com/js/js_json_intro.asp)
+- [RESTful API]()
+- [SQLite](https://sqlite.org/index.html)
+- [SQL](https://www.w3schools.com/sql/)
 - [Browser (phone and desktop)](https://www.google.com/chrome/dev/)
 
-## Python Libraries
+## External Python Libraries
 - Blinka
 - Flask
 - DotMap
