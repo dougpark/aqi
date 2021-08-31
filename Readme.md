@@ -1,5 +1,9 @@
 # Air Quality Index 
 
+# About
+
+Join in on the Raspberry Pi Zero fun while exploring a whole host of cool tech! We will build a system that reads the PurpleAir api and displays the current Air Quaility Index for your selected sensor, while also building a cool web api to control the display!
+
 ## Technologies
 
 - [PurpleAir Sensor](https://www2.purpleair.com/collections/air-quality-sensors)
@@ -20,3 +24,8 @@
 - [Json](https://www.w3schools.com/js/js_json_intro.asp)
 - [Browser (phone and desktop)](https://www.google.com/chrome/dev/)
 
+## Python Libraries
+- Blinka
+- Flask
+- DotMap
+- 
