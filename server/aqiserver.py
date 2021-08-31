@@ -59,6 +59,31 @@ def aqi_index():
     return resp
 
 
+@app.route('/api/sensor', methods=['GET', 'POST'])
+def get_sensor_post():
+    logging.info('**************** starting sensor ')
+    # logging.info('request user_agent: ', request.)
+    out = get_sensor_proc()
+    r = out.toDict()
+    return jsonify(result=r, status=200)
+
+
+def get_sensor_proc():
+    error = None
+    out = DotMap()
+    sensor_id = 0
+    try:
+        sensor_id = datastore.get_sensor_id()
+    except Exception as e:
+        error = e
+        logging.warning(e)
+    out.sensor_id = sensor_id
+    out.error = error
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
+    logging.info('get_sensor_proc - sensor_id from db.', out.toDict())
+    return out
+
+
 @app.route('/api/aqi', methods=['GET', 'POST'])
 def aqi_post():
     logging.info('**************** starting aqi ')

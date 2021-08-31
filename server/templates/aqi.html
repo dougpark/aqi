@@ -24,15 +24,32 @@
 
 <body>
     <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
-        <h2 class="w3-text-white w3-center">AQI</h2>
-
         <div class="w3-card-4 w3-dark-grey w3-center w3-round">
-
+            <div class="w3-container w3-blue w3-center w3-round">
+                <h2 class="w3-text-white w3-center">AQI</h2>
+            </div>
             <div class="w3-container w3-center">
                 <div class="w3-center" style="width:80%; margin-left: auto; margin-right: auto; width: 20em">
                     <h3 id="sensor_label"></h3>
 
                     <h3 id="sensor_result" class="w3-text-black w3-round"></h3>
+                </div>
+                <div class="w3-section">
+                    <button class="w3-button w3-blue w3-round">Refresh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
+        <div class="w3-card-4 w3-dark-grey w3-center w3-round">
+            <div class="w3-container w3-blue w3-round">
+                <h2 class="w3-text-white w3-center  ">Control</h2>
+            </div>
+            <div class="w3-container w3-center">
+                <div class="w3-center" style="width:80%; margin-left: auto; margin-right: auto; width: 20em">
+                    <h3 id="x_label">Label</h3>
+                    <h3 id="x_result" class="w3-text-black w3-round">Result</h3>
                 </div>
                 <div class="w3-section">
                     <button class="w3-button w3-green w3-round">Accept</button>
@@ -42,24 +59,25 @@
 
         </div>
     </div>
-
+    <br>
     <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
-        <h2 class="w3-text-white w3-center">Control</h2>
-
-        <div class="w3-card-4 w3-dark-grey w3-center w3-round">
-
-            <div class="w3-container w3-center">
-                <div class="w3-center" style="width:80%; margin-left: auto; margin-right: auto; width: 20em">
-                    <h3 id="x_label">Control</h3>
-
-                    <h3 id="x_result" class="w3-text-black w3-round">Result</h3>
-                </div>
-                <div class="w3-section">
-                    <button class="w3-button w3-green w3-round">Accept</button>
-                    <button class="w3-button w3-red w3-round">Decline</button>
+        <div class="w3-card-4 w3-dark-grey w3-round">
+            <div class="w3-container w3-blue w3-round">
+                <h2>Purple Air</h2>
+            </div>
+            <div class="w3-container">
+                <form class="w3-container">
+                    <label>Current Sensor Id</label>
+                    <h3 id="currentSensorId">CurrentSensorId</h3>
+                    <p>
+                        <label>NewSensor Id</label>
+                        <input id="saveSensorId" class="w3-input w3-round" type="text">
+                    </p>
+                </form>
+                <div class="w3-section w3-center">
+                    <button id="saveSensorBtn" class="w3-button w3-blue w3-round">Save</button>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -71,6 +89,7 @@
             var data = {};
             data.server = "aqi_server"
             getAqi(data)
+            getSensorId(data)
         });
 
         function getAqi(data) {
@@ -102,6 +121,74 @@
             });
 
         }
+
+        $("#saveSensorBtn").click(function (e) {
+            var idClicked = e.target.id;
+            console.log(idClicked)
+
+            var data = {};
+            // vanilla javascript method to get value by name
+            data.sensor_id = $("#saveSensorId").val()
+            data.server = "aqi_server"
+            saveSensorId(data)
+
+        });
+
+        function saveSensorId(data) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/sensor_post',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (callback) {
+                    console.log(callback)
+                    console.log(callback.result);
+                    console.log(callback.result.sensor_id)
+                    result = callback.result
+                    error = result.error
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    if (!error) {
+                        $('#currentSensorId').text(result.sensor_id);
+                        getAqi(data)
+                    } else {
+                        $('#currentSensorId').text('Error: ' + error);
+                    }
+                },
+                error: function () {
+                    $('#currentSensorId').html("error!");
+                }
+            });
+        }
+
+        function getSensorId(data) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/sensor',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (callback) {
+                    console.log(callback)
+                    console.log(callback.result);
+                    console.log(callback.result.aqi)
+                    result = callback.result
+                    error = result.error
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    if (!error) {
+                        $("#currentSensorId").text(result.sensor_id)
+                    } else {
+                        $("#currentSensorId").text('Error: ' + error);
+                    }
+
+                },
+                error: function () {
+                    $("#currentSensorId").html("error!");
+                }
+            });
+
+        }
+
     </script>
 </body>
 
