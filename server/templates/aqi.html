@@ -35,13 +35,13 @@
                     <h3 id="sensor_result" class="w3-text-black w3-round"></h3>
                 </div>
                 <div class="w3-section">
-                    <button class="w3-button w3-blue w3-round">Refresh</button>
+                    <button id='refresh' class="w3-button w3-blue w3-round">Refresh</button>
                 </div>
             </div>
         </div>
     </div>
     <br>
-    <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
+    <div class="w3-container w3-round" style="display: none; margin-left: auto; margin-right: auto; width: 25em">
         <div class="w3-card-4 w3-dark-grey w3-center w3-round">
             <div class="w3-container w3-blue w3-round">
                 <h2 class="w3-text-white w3-center  ">Control</h2>
@@ -62,13 +62,15 @@
     <br>
     <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
         <div class="w3-card-4 w3-dark-grey w3-round">
-            <div class="w3-container w3-blue w3-round">
+            <div class="w3-container w3-blue w3-center w3-round">
                 <h2>Purple Air</h2>
             </div>
             <div class="w3-container">
                 <form class="w3-container">
-                    <label>Current Sensor Id</label>
-                    <h3 id="currentSensorId">CurrentSensorId</h3>
+                    <p>
+                        <label>Current Sensor Id</label>
+                    <p id="currentSensorId">CurrentSensorId</p>
+                    </p>
                     <p>
                         <label>NewSensor Id</label>
                         <input id="saveSensorId" class="w3-input w3-round" type="text">
@@ -122,6 +124,17 @@
 
         }
 
+        $("#refresh").click(function (e) {
+            var idClicked = e.target.id;
+            console.log(idClicked)
+
+            var data = {};
+            data.server = "aqi_server"
+            getAqi(data)
+            getSensorId(data)
+
+        });
+
         $("#saveSensorBtn").click(function (e) {
             var idClicked = e.target.id;
             console.log(idClicked)
@@ -150,7 +163,7 @@
                     // Watch out for Cross Site Scripting security issues when setting dynamic content!
                     if (!error) {
                         $('#currentSensorId').text(result.sensor_id);
-                        getAqi(data)
+                        getAqi(data) // reload aqi with new sensor_id
                     } else {
                         $('#currentSensorId').text('Error: ' + error);
                     }
@@ -171,7 +184,7 @@
                 success: function (callback) {
                     console.log(callback)
                     console.log(callback.result);
-                    console.log(callback.result.aqi)
+                    console.log(callback.result.sensor_id)
                     result = callback.result
                     error = result.error
                     // Watch out for Cross Site Scripting security issues when setting dynamic content!
