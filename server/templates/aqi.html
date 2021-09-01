@@ -23,8 +23,19 @@
 </head>
 
 <body>
+
     <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
-        <div class="w3-card-4 w3-dark-grey w3-center w3-round">
+        <!-- Navigation Bar -->
+        <div class="w3-round w3-bar w3-blue">
+            <button class="w3-round w3-bar-item w3-button tablink w3-bottombar w3-border-red"
+                onclick="openTab(event,'AQI')">AQI</button>
+            <button class="w3-round w3-bar-item w3-button tablink w3-bottombar w3-border-blue"
+                onclick="openTab(event,'Settings')">Settings</button>
+        </div>
+        <br>
+
+        <!-- AQI Tab -->
+        <div id="AQI" class="w3-card-4 w3-dark-grey w3-center w3-round tab">
             <div class="w3-container w3-blue w3-center w3-round">
                 <h2 class="w3-text-white w3-center">AQI</h2>
             </div>
@@ -39,29 +50,30 @@
                 </div>
             </div>
         </div>
-    </div>
-    <br>
-    <div class="w3-container w3-round" style="display: none; margin-left: auto; margin-right: auto; width: 25em">
-        <div class="w3-card-4 w3-dark-grey w3-center w3-round">
-            <div class="w3-container w3-blue w3-round">
-                <h2 class="w3-text-white w3-center  ">Control</h2>
-            </div>
-            <div class="w3-container w3-center">
-                <div class="w3-center" style="width:80%; margin-left: auto; margin-right: auto; width: 20em">
-                    <h3 id="x_label">Label</h3>
-                    <h3 id="x_result" class="w3-text-black w3-round">Result</h3>
-                </div>
-                <div class="w3-section">
-                    <button class="w3-button w3-green w3-round">Accept</button>
-                    <button class="w3-button w3-red w3-round">Decline</button>
-                </div>
-            </div>
 
+        <!-- Unused Tab -->
+        <div id="unused" class="w3-container w3-round tab"
+            style="display: none; margin-left: auto; margin-right: auto; width: 25em">
+            <div class="w3-card-4 w3-dark-grey w3-center w3-round">
+                <div class="w3-container w3-blue w3-round">
+                    <h2 class="w3-text-white w3-center  ">Control</h2>
+                </div>
+                <div class="w3-container w3-center">
+                    <div class="w3-center" style="width:80%; margin-left: auto; margin-right: auto; width: 20em">
+                        <h3 id="x_label">Label</h3>
+                        <h3 id="x_result" class="w3-text-black w3-round">Result</h3>
+                    </div>
+                    <div class="w3-section">
+                        <button class="w3-button w3-green w3-round">Accept</button>
+                        <button class="w3-button w3-red w3-round">Decline</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
-    <br>
-    <div class="w3-container w3-round" style=" margin-left: auto; margin-right: auto; width: 25em">
-        <div class="w3-card-4 w3-dark-grey w3-round">
+
+        <!-- Settings Tab -->
+        <div id="Settings" class="w3-card-4 w3-dark-grey w3-round tab" style="display: none;">
             <div class="w3-container w3-blue w3-center w3-round">
                 <h2>Purple Air</h2>
             </div>
@@ -82,7 +94,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -93,6 +104,20 @@
             getAqi(data)
             getSensorId(data)
         });
+
+        function openTab(evt, tabName) {
+            var i, tabs, tablinks;
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" w3-border-red", " w3-border-blue");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " w3-border-red";
+        }
 
         function getAqi(data) {
             $.ajax({
