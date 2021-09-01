@@ -21,6 +21,7 @@ Join in on the Raspberry Pi Zero fun while exploring a whole host of cool tech! 
 - [Html](https://www.w3schools.com/html/default.asp)
 - [CSS](https://www.w3schools.com/css/default.asp)
 - [W3.CSS framework](https://www.w3schools.com/w3css/)
+- [Ajax](https://www.w3schools.com/xml/ajax_intro.asp)
 - [JSON](https://www.w3schools.com/js/js_json_intro.asp)
 - [RESTful API]()
 - [SQLite](https://sqlite.org/index.html)
